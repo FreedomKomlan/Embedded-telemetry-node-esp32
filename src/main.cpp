@@ -1,6 +1,10 @@
 #include "global.hpp"
 #include "drivers/uart_console.hpp"
 #include "drivers/dht11.hpp"
+#include "app/tasks_manager.hpp"
+#include "config.hpp"
+#include "middleware/msg_queue.hpp"
+#include "app/tasks_manager.hpp"
 
 UartConsole console(0, 1, 3, 115200);
 
@@ -14,16 +18,10 @@ extern "C" void app_main() {
         }
     }
 
+    TasksManager tasks_manager(std::move(dht11), console);
+    tasks_manager.start();
+
     while (true) {
-        auto data = dht11->read();
-        if (data) {
-            char buffer[64];
-            snprintf(buffer, sizeof(buffer), "Temp: %.1f C, Humidity: %.1f%%", data->temperature, data->humidity);
-            console.writeln(buffer);
-        } else {
-            console.writeln("Failed to read from DHT11 sensor!");
-        }
-        // console.writeln("Hello from ESP32!");
-        vTaskDelay(pdMS_TO_TICKS(2000)); // Delay for 1 second
+        vTaskDelay(portMAX_DELAY); // Delay for 1 second
     }
 }

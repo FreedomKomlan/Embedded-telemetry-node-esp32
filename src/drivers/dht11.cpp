@@ -136,6 +136,6 @@ std::optional<DHT11_SensorData> DHT11Driver::read() {
     sensor_data.humidity = static_cast<float>(data[0]);
     sensor_data.temperature = static_cast<float>(data[2]);
 
-    ESP_LOGI(TAG, "Read sensor data: Temperature = %.1f C, Humidity = %.1f%%", sensor_data.temperature, sensor_data.humidity);
+    // ESP_LOGI(TAG, "Read sensor data: Temperature = %.1f C, Humidity = %.1f%%", sensor_data.temperature, sensor_data.humidity);
     return sensor_data;
 }

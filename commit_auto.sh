@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Message de commit par défaut avec la date
-COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): DHT11 Object and Gpio Driver implementation - It works After testing (DHT11 pinout : S + -  corresponds Data VCC GND. I got misleaded by some schemantic on internet)"
+COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): Add TasksManager class and refactor main.cpp, msg_queue.hpp will add another task to read msg_queue and send to console"
 
 # Aller dans le dossier du projet (à adapter)
 cd "C:\Users\kfree\Documents\Data_Elcool\Projets\Software_Dev\SY-36_ESPX" || exit
