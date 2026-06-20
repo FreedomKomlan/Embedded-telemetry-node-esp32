@@ -4,6 +4,7 @@
 #include "global.hpp"
 #include "drivers/uart_console.hpp"
 #include "drivers/dht11.hpp"
+#include "middleware/msg_queue.hpp"
 
 class TasksManager {
     public:
@@ -12,9 +13,12 @@ class TasksManager {
         void start();
 
     private:
+
         DHT11Driver::Ptr dht_;
         UartConsole& console_;
+        MsgQueue<DHT11_SensorData, 10> msg_queue_;
         static void sensorTask(void* params);
+        static void consoleTask(void* params);
 };
 
 #endif // TASKS_MANAGER_HPP
