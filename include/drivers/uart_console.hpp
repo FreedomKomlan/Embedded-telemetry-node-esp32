@@ -17,6 +17,7 @@ class UartConsole {
 
         void write(std::string_view str);
         void writeln(std::string_view str);
+        int readByte();
 
     private:
         int uart_num_;

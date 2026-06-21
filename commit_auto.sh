@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Message de commit par défaut avec la date
-COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): Added console task and a msg_queue"
+COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): Add button-gpio class and integrate another queue for event and commands handling"
 
 # Aller dans le dossier du projet (à adapter)
 cd "C:\Users\kfree\Documents\Data_Elcool\Projets\Software_Dev\SY-36_ESPX" || exit

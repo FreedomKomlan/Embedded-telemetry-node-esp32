@@ -25,17 +25,6 @@ UartConsole::UartConsole(int uart_num, int tx_pin, int rx_pin, int baudrate) : u
 
     // UART configuration parameters
     
-    // uart_config_t uart_config = {
-    //     .baud_rate = baudrate,
-    //     .data_bits = UART_DATA_8_BITS,
-    //     .parity = UART_PARITY_DISABLE,
-    //     .stop_bits = UART_STOP_BITS_1,
-    //     .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-    //     .rx_flow_ctrl_thresh = 0,
-    //     .source_clk = UART_SCLK_APB,
-    //     .flags = 0
-    // };
-
     uart_config_t uart_config = {};
     
     uart_config.baud_rate = baudrate;
@@ -87,7 +76,6 @@ UartConsole::~UartConsole() {
 // Write a string to the UART console
 void UartConsole::write(std::string_view str) {
     if (!initialized_) return;
-    
     uart_write_bytes(UART_PORTS[uart_num_], str.data(), str.size());
 }
 
@@ -95,4 +83,12 @@ void UartConsole::write(std::string_view str) {
 void UartConsole::writeln(std::string_view str) {
     write(str);
     write("\n");
+}
+
+int UartConsole::readByte() {
+    if (!initialized_) return -1;
+    uint8_t ch;
+    int len = uart_read_bytes(UART_PORTS[uart_num_], &ch, 1, 0);
+    if (len > 0) return ch;
+    return -1;
 }

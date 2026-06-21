@@ -6,7 +6,7 @@
 #include "middleware/msg_queue.hpp"
 #include "app/tasks_manager.hpp"
 
-UartConsole console(0, 1, 3, 115200);
+UartConsole console(UART_NUMBER, UART_TX_PIN, UART_RX_PIN, BAUDRATE);
 
 extern "C" void app_main() {
     console.writeln("UART Communication initialized successfully!");
