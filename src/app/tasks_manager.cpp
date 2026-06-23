@@ -45,50 +45,69 @@ void TasksManager::consoleTask(void* params) {
     while (true) {
 
         // get sensor data and display to console
-        auto data = manager->dataQueue_.pop();
-        if (data) {
-            char buffer[64];
-            snprintf(buffer, sizeof(buffer), "Console Task - Temp: %.1f C, Humidity: %.1f%%", data->temperature, data->humidity);
-            manager->console_.writeln(buffer);
-        }
+        // auto data = manager->dataQueue_.pop();
+        // if (data) {
+        //     char buffer[64];
+        //     snprintf(buffer, sizeof(buffer), "Console Task - Temp: %.1f C, Humidity: %.1f%%", data->temperature, data->humidity);
+        //     manager->console_.writeln(buffer);
+        // }
+
+
 
         // Get command lines
         int ch = manager->console_.readByte();
         if (ch > 0) {
-            // Echo
-            manager->console_.writeChar(static_cast<char>(ch));
+            lastCharTime = xTaskGetTickCount();
+            
             if (ch == '\n' || ch == '\r') {
                 // end of line
-                std::string_view line(input_line);
-                Command cmd = CommandParser::parseCommand(line);
-                manager->console_.write("Command : ");
-                manager->console_.writeln(line);
-                switch (cmd) {
-                    case Command::STATUS:
-                        // Placeholder for status display
-                        manager->console_.writeln("Status: OK");
-                        break;
 
-                    case Command::LAST_EVENT:
-                        // Placeholder for status display
-                        manager->console_.writeln("Last Event: ...");
-                        break;
+                if (!input_line.empty()) {
+                    std::string_view line(input_line);
+                    Command cmd = CommandParser::parseCommand(line);
+                    manager->console_.write("Command : ");
+                    manager->console_.writeln(line);
+                    switch (cmd) {
+                        case Command::STATUS:
+                            // Placeholder for status display
+                            manager->console_.writeln("Status: OK");
+                            break;
 
-                    case Command::CLEAR:
-                        // Placeholder for status display
-                        manager->console_.writeln("Clearing...");
-                        break;
+                        case Command::LAST_EVENT:
+                            // Placeholder for status display
+                            manager->console_.writeln("Last Event: ...");
+                            break;
 
-                    case Command::HELP:
-                        // Placeholder for status display
-                        manager->console_.writeln("Commands: status, last_event, clear, help");
-                        break;
-                    
-                    default:
-                        manager->console_.writeln("Unknown command");
-                        break;
+                        case Command::CLEAR:
+                            // Placeholder for status display
+                            manager->console_.writeln("Clearing...");
+                            break;
+
+                        case Command::HELP:
+                            // Placeholder for status display
+                            manager->console_.writeln("Commands: status, last_event, clear, help");
+                            break;
+                        
+                        default:
+                            manager->console_.writeln("Unknown command");
+                            break;
+                    }
                 }
                 input_line.clear();
+            } else {
+                manager->console_.writeChar(static_cast<char>(ch));
+                input_line += static_cast<char>(ch);
+            }
+        } else {
+            if (xTaskGetTickCount() - lastCharTime > inputTimeout) {
+                if (input_line.empty()) {
+                    auto data = manager->dataQueue_.pop();
+                    if (data) { 
+                        char buffer[64];
+                        snprintf(buffer, sizeof(buffer), "Console Task - Temp: %.1f C, Humidity: %.1f%%", data->temperature, data->humidity);
+                        manager->console_.writeln(buffer);
+                    }
+                }
             }
         }
         vTaskDelayUntil(&lastAcquisitionTime, pdMS_TO_TICKS(DATA_WRITE_INTERVAL_MS));
