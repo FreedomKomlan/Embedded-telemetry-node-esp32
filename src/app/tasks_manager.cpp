@@ -37,8 +37,10 @@ void TasksManager::sensorTask(void* params) {
 
 void TasksManager::consoleTask(void* params) {
     TasksManager* manager = static_cast<TasksManager*>(params);
-    TickType_t lastAcquisitionTime = xTaskGetTickCount();
     std::string input_line;
+    TickType_t lastAcquisitionTime = xTaskGetTickCount();
+    TickType_t lastCharTime = xTaskGetTickCount();
+    const TickType_t inputTimeout = pdMS_TO_TICKS(200);
 
     while (true) {
 
@@ -53,6 +55,8 @@ void TasksManager::consoleTask(void* params) {
         // Get command lines
         int ch = manager->console_.readByte();
         if (ch > 0) {
+            // Echo
+            manager->console_.writeChar(static_cast<char>(ch));
             if (ch == '\n' || ch == '\r') {
                 // end of line
                 std::string_view line(input_line);

@@ -85,6 +85,11 @@ void UartConsole::writeln(std::string_view str) {
     write("\n");
 }
 
+void UartConsole::writeChar(char c) {
+    if (!initialized_) return;
+    uart_write_bytes(UART_PORTS[uart_num_], &c, 1);
+}
+
 int UartConsole::readByte() {
     if (!initialized_) return -1;
     uint8_t ch;

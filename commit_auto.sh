@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Message de commit par défaut avec la date
-COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): Sensor failure output test"
+COMMIT_MESSAGE="Commit on $(date '+%Y-%m-%d %H:%M'): Integrating typing echo for command"
 
 # Aller dans le dossier du projet (à adapter)
 cd "C:\Users\kfree\Documents\Data_Elcool\Projets\Software_Dev\SY-36_ESPX" || exit
